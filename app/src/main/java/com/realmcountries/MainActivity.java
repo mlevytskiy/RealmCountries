@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             Country country;
             if ( (country = isNew(list, name)) == null ) {
                 country = new Country();
-                country.setCodes(code);
+                country.setCode1(code);
                 country.setName(name);
                 if (map.get(entry.getValue()) == null) {
                     Log.e("MainActivity", entry.getValue() + " cities=null");
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 list.add(country);
             } else {
-                country.setCodes(country.getCodes() + "|" + code);
+                country.setCode2(code);
             }
         }
         realm.copyToRealm(list);
