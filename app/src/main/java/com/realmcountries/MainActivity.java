@@ -46,15 +46,22 @@ public class MainActivity extends AppCompatActivity {
         realm.beginTransaction();
         RealmList<Country> list = new RealmList<>();
         for (Map.Entry<String, String> entry : CountriesCodes.map.entrySet()) {
-            Country country = new Country();
-            country.setCodes(entry.getKey());
-            country.setName(entry.getValue());
-            if (map.get(entry.getValue()) == null) {
-                Log.e("MainActivity", entry.getValue() + " cities=null");
+            String name = entry.getValue();
+            String code = entry.getKey();
+            Country country;
+            if ( (country = isNew(list, name)) == null ) {
+                country = new Country();
+                country.setCodes(code);
+                country.setName(name);
+                if (map.get(entry.getValue()) == null) {
+                    Log.e("MainActivity", entry.getValue() + " cities=null");
+                } else {
+                    country.setCities(TextUtils.join("|", map.get(entry.getValue())));
+                }
+                list.add(country);
             } else {
-                country.setCities(TextUtils.join("|", map.get(entry.getValue())));
+                country.setCodes(country.getCodes() + "|" + code);
             }
-            list.add(country);
         }
         realm.copyToRealm(list);
         realm.commitTransaction();
